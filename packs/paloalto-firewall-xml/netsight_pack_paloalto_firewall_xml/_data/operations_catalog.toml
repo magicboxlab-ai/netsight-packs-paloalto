@@ -1,0 +1,74 @@
+[show_system_info]
+command = "<show><system><info></info></system></show>"
+type = "op"
+category = "system"
+description = "Show system information and uptime"
+read_only = true
+parser_spec = "parsers/show_system_info.yaml"
+
+[show_interfaces]
+command = "<show><interface>all</interface></show>"
+type = "op"
+category = "network"
+description = "Show all interface status"
+read_only = true
+parser_spec = "parsers/show_interfaces.yaml"
+
+[show_routing_table]
+command = "<show><routing><route></route></routing></show>"
+type = "op"
+category = "network"
+description = "Show routing table"
+read_only = true
+parser_spec = "parsers/show_routing_table.yaml"
+
+[show_arp_table]
+command = "<show><arp><entry name='all'></entry></arp></show>"
+type = "op"
+category = "network"
+description = "Show ARP table"
+read_only = true
+parser_spec = "parsers/show_arp_table.yaml"
+
+[show_ha_status]
+command = "<show><high-availability><all></all></high-availability></show>"
+type = "op"
+category = "system"
+description = "Show HA status"
+read_only = true
+parser_spec = "parsers/show_ha_status.yaml"
+
+[show_session_info]
+command = "<show><session><info></info></session></show>"
+type = "op"
+category = "system"
+description = "Show session information"
+read_only = true
+
+[get_traffic_logs]
+command = ""
+type = "log"
+category = "logs"
+description = "Query traffic logs"
+read_only = true
+
+[get_threat_logs]
+command = ""
+type = "log"
+category = "logs"
+description = "Query threat logs"
+read_only = true
+
+[get_system_logs]
+command = ""
+type = "log"
+category = "logs"
+description = "Query system logs"
+read_only = true
+
+[request_logging_service_forwarding_status]
+command = "<request><logging-service-forwarding><status></status></logging-service-forwarding></request>"
+type = "op"
+category = "system"
+description = "Check logging service forwarding status"
+read_only = true

@@ -1,0 +1,26 @@
+spec_version: "1.0"
+engine: jmespath
+operation: show_ha_status
+input_format: xml
+output_shape: dict
+description: "PAN-OS HA status"
+
+root: response.result
+
+fields:
+  enabled:
+    function: panos_bool_yes
+    args:
+      path: response.result.enabled
+  local_state:
+    path: '"local-info".state'
+    type: str
+  peer_state:
+    path: '"peer-info".state'
+    type: str
+  local_ip:
+    path: '"local-info"."mgmt-ip"'
+    type: str
+  peer_ip:
+    path: '"peer-info"."mgmt-ip"'
+    type: str

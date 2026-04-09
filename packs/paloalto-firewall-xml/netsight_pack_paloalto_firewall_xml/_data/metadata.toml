@@ -1,0 +1,4 @@
+[metadata]
+vendor = "paloalto"
+display_name = "Palo Alto Networks"
+description = "PAN-OS firewalls and Panorama"

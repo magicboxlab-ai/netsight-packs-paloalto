@@ -1,0 +1,11 @@
+spec_version: "1.0"
+engine: jmespath
+operation: show_interfaces
+input_format: xml
+output_shape: list
+description: "PAN-OS interfaces with hardware status merged"
+
+extract_function: panos_interfaces_with_status
+extract_args:
+  ifnet_path: response.result.ifnet.entry
+  hw_path: response.result.hw.entry

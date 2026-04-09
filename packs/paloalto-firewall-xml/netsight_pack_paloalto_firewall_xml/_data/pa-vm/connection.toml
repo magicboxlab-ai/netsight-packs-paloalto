@@ -1,0 +1,2 @@
+[connection]
+verify_ssl = false

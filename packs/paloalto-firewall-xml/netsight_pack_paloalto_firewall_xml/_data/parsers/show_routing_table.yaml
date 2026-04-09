@@ -1,0 +1,16 @@
+spec_version: "1.0"
+engine: jmespath
+operation: show_routing_table
+input_format: xml
+output_shape: list
+description: "PAN-OS routing table"
+
+iterate: response.result.entry
+
+fields:
+  destination: {path: destination, type: str}
+  nexthop: {path: nexthop, type: str}
+  interface: {path: interface, type: str}
+  metric: {path: metric, type: int}
+  flags: {path: flags, type: str}
+  age: {path: age, type: int, default: null}

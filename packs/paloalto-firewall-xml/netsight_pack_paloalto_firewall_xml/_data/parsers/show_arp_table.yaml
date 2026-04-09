@@ -1,0 +1,15 @@
+spec_version: "1.0"
+engine: jmespath
+operation: show_arp_table
+input_format: xml
+output_shape: list
+description: "PAN-OS ARP table"
+
+iterate: response.result.entries.entry
+
+fields:
+  interface: {path: interface, type: str}
+  ip: {path: ip, type: str}
+  mac: {path: mac, type: str}
+  status: {path: status, type: str}
+  ttl: {path: ttl, type: int}

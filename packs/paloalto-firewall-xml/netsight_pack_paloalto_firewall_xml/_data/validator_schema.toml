@@ -1,0 +1,14 @@
+[command_syntax]
+format = "xml"
+
+[read_only_patterns]
+allow = ["show.*", "get.*", "request.*.status"]
+
+[destructive_patterns]
+block = ["set.*", "delete.*", "edit.*", "rename.*", "move.*", "commit.*", "import.*", "export.*", "request.*.restart", "request.*.shutdown"]
+
+[valid_categories]
+categories = ["system", "network", "security", "logs", "inventory"]
+
+[valid_types]
+types = ["op", "log"]

@@ -1,0 +1,28 @@
+spec_version: "1.0"
+engine: jmespath
+operation: show_system_info
+input_format: xml
+output_shape: dict
+description: "PAN-OS system information from show system info"
+
+root: response.result.system
+
+fields:
+  hostname:
+    path: hostname
+    type: str
+  ip_address:
+    path: '"ip-address"'
+    type: str
+  model:
+    path: model
+    type: str
+  serial:
+    path: serial
+    type: str
+  sw_version:
+    path: '"sw-version"'
+    type: str
+  uptime:
+    path: uptime
+    type: str

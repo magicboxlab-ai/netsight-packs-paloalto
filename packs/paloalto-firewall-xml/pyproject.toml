@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "netsight-pack-paloalto-firewall-xml"
+version = "0.1.0"
+description = "NetSight pack for Palo Alto Networks PAN-OS firewalls via XML API"
+requires-python = ">=3.14"
+dependencies = [
+    "netsight>=0.1.0",
+    "requests>=2.31.0",
+    "xmltodict>=0.13.0",
+]
+
+[project.entry-points."netsight.packs"]
+paloalto-firewall-xml = "netsight_pack_paloalto_firewall_xml:register"
+
+[tool.setuptools.packages.find]
+include = ["netsight_pack_paloalto_firewall_xml*"]
+
+[tool.setuptools.package-data]
+netsight_pack_paloalto_firewall_xml = [
+    "_data/**/*.toml",
+    "_data/**/*.yaml",
+    "py.typed",
+]
