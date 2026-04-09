@@ -1,6 +1,27 @@
+# Operations catalog for paloalto-firewall-xml.
+#
+# Every entry declares:
+#
+#   command         — XML payload for type="op" operations (empty for log ops)
+#   type            — dispatch shape: "op" (XML command) or "log" (log query)
+#   log_type        — REQUIRED for type="log": the PAN-OS log channel name
+#                     ("traffic", "threat", "system", "config", "url", etc.)
+#   category        — coarse grouping for UX / filtering
+#   description     — one-line human-readable summary
+#   read_only       — MUST be true; write operations are refused at compile time
+#   parser_spec     — optional path to a parser YAML under parsers/
+#   required_model  — "*" (any PAN-OS model) or a list like ["pa-vm", "panorama"]
+#
+# The paloalto-firewall-xml pack currently supports every listed operation
+# on every PAN-OS model — so every required_model is the wildcard "*". When
+# a future operation becomes model-specific (e.g. a Panorama-only command),
+# change its required_model to ["panorama"] and the BaseDeviceClient model
+# gate will refuse it on non-Panorama devices at execute time.
+
 [show_system_info]
 command = "<show><system><info></info></system></show>"
 type = "op"
+required_model = "*"
 category = "system"
 description = "Show system information and uptime"
 read_only = true
@@ -9,6 +30,7 @@ parser_spec = "parsers/show_system_info.yaml"
 [show_interfaces]
 command = "<show><interface>all</interface></show>"
 type = "op"
+required_model = "*"
 category = "network"
 description = "Show all interface status"
 read_only = true
@@ -17,6 +39,7 @@ parser_spec = "parsers/show_interfaces.yaml"
 [show_routing_table]
 command = "<show><routing><route></route></routing></show>"
 type = "op"
+required_model = "*"
 category = "network"
 description = "Show routing table"
 read_only = true
@@ -25,6 +48,7 @@ parser_spec = "parsers/show_routing_table.yaml"
 [show_arp_table]
 command = "<show><arp><entry name='all'></entry></arp></show>"
 type = "op"
+required_model = "*"
 category = "network"
 description = "Show ARP table"
 read_only = true
@@ -33,6 +57,7 @@ parser_spec = "parsers/show_arp_table.yaml"
 [show_ha_status]
 command = "<show><high-availability><all></all></high-availability></show>"
 type = "op"
+required_model = "*"
 category = "system"
 description = "Show HA status"
 read_only = true
@@ -41,6 +66,7 @@ parser_spec = "parsers/show_ha_status.yaml"
 [show_session_info]
 command = "<show><session><info></info></session></show>"
 type = "op"
+required_model = "*"
 category = "system"
 description = "Show session information"
 read_only = true
@@ -48,6 +74,8 @@ read_only = true
 [get_traffic_logs]
 command = ""
 type = "log"
+log_type = "traffic"
+required_model = "*"
 category = "logs"
 description = "Query traffic logs"
 read_only = true
@@ -55,6 +83,8 @@ read_only = true
 [get_threat_logs]
 command = ""
 type = "log"
+log_type = "threat"
+required_model = "*"
 category = "logs"
 description = "Query threat logs"
 read_only = true
@@ -62,6 +92,8 @@ read_only = true
 [get_system_logs]
 command = ""
 type = "log"
+log_type = "system"
+required_model = "*"
 category = "logs"
 description = "Query system logs"
 read_only = true
@@ -69,6 +101,7 @@ read_only = true
 [request_logging_service_forwarding_status]
 command = "<request><logging-service-forwarding><status></status></logging-service-forwarding></request>"
 type = "op"
+required_model = "*"
 category = "system"
 description = "Check logging service forwarding status"
 read_only = true

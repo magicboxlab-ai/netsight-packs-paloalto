@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "netsight-pack-paloalto-firewall-xml"
-version = "0.1.0"
+version = "0.1.1"
 description = "NetSight pack for Palo Alto Networks PAN-OS firewalls via XML API"
 requires-python = ">=3.14"
 dependencies = [
@@ -13,11 +13,24 @@ dependencies = [
     "xmltodict>=0.13.0",
 ]
 
+[project.optional-dependencies]
+# Test-only dependencies for ``pytest packs/paloalto-firewall-xml/tests``.
+# The per-command tests under ``tests/`` import from ``netsight`` and
+# from this pack itself; pytest is the only extra runtime requirement.
+test = [
+    "pytest>=7.0",
+]
+
 [project.entry-points."netsight.packs"]
 paloalto-firewall-xml = "netsight_pack_paloalto_firewall_xml:register"
 
 [tool.setuptools.packages.find]
+# Only ship the pack runtime module. The sibling ``tests/`` directory
+# lives next to it in the source tree but MUST NOT be installed — it
+# is run by pytest against the source, and would otherwise pollute
+# site-packages with test code.
 include = ["netsight_pack_paloalto_firewall_xml*"]
+exclude = ["tests*"]
 
 [tool.setuptools.package-data]
 netsight_pack_paloalto_firewall_xml = [
@@ -25,3 +38,6 @@ netsight_pack_paloalto_firewall_xml = [
     "_data/**/*.yaml",
     "py.typed",
 ]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -49,13 +49,6 @@ logger = logging.getLogger(__name__)
 
 _PANOS_API_PATH = "/api/"
 
-# Maps log-retrieval operation names to the PAN-OS log-type string.
-_LOG_TYPE_MAP: dict[str, str] = {
-    "get_traffic_logs": "traffic",
-    "get_threat_logs": "threat",
-    "get_system_logs": "system",
-}
-
 
 # ---------------------------------------------------------------------------
 # PanOSXMLAuthStrategy
@@ -214,8 +207,15 @@ class PanOSXMLAuthStrategy(AuthStrategy):
 class PanOSXMLClient(BaseDeviceClient):
     """NetSight device client for Palo Alto Networks PAN-OS XML API.
 
-    All operations are read-only; write / commit operations are intentionally
-    absent from :attr:`ALLOWED_OPERATIONS`.
+    All operation metadata — the set of supported operations, their
+    command strings, their type (op vs log), and their log-type
+    mapping — comes from the pack's ``_data/operations_catalog.toml``
+    via :class:`BaseDeviceClient`'s per-instance dispatch dicts
+    (``self._op_commands``, ``self._op_types``, ``self._log_types``).
+
+    This class is deliberately free of any hardcoded operation lists,
+    command strings, or log-type tables. If you need to add a new
+    PAN-OS operation, edit the catalog only.
 
     Parameters
     ----------
@@ -225,31 +225,13 @@ class PanOSXMLClient(BaseDeviceClient):
         Optional :class:`PanOSXMLAuthStrategy` instance.  If omitted one is
         created automatically using ``config.verify_ssl`` and
         ``config.timeout_connect``.
+    resolved_config:
+        Required compiled catalog for this pack. Produced by
+        :class:`netsight.config_mgmt.ConfigCompiler` or loaded from the
+        cached resolved JSON by :class:`LocalBackend`. Commit 5 of the
+        pack-design refactor makes this argument strictly required in
+        :class:`BaseDeviceClient`; PanOSXMLClient has no fallback path.
     """
-
-    ALLOWED_OPERATIONS: set[str] = {
-        "show_system_info",
-        "show_interfaces",
-        "show_routing_table",
-        "show_arp_table",
-        "show_ha_status",
-        "show_session_info",
-        "get_traffic_logs",
-        "get_threat_logs",
-        "get_system_logs",
-        "keygen",
-    }
-
-    # Maps operational (non-log) operations to their PAN-OS XML op commands.
-    _OP_COMMANDS: dict[str, str] = {
-        "show_system_info": "<show><system><info></info></system></show>",
-        "show_interfaces": "<show><interface>all</interface></show>",
-        "show_routing_table": "<show><routing><route></route></routing></show>",
-        "show_arp_table": "<show><arp><entry name='all'/></arp></show>",
-        "show_ha_status": "<show><high-availability><state></state></high-availability></show>",
-        "show_session_info": "<show><session><info></info></session></show>",
-        "keygen": "",  # keygen is handled by the auth strategy, not op commands
-    }
 
     def __init__(
         self,
@@ -273,6 +255,12 @@ class PanOSXMLClient(BaseDeviceClient):
     def _authenticate(self) -> str:
         """Obtain an API key via the auth manager's token cache.
 
+        The keygen exchange is a pack-internal auth primitive — it is
+        NOT a user-facing operation and MUST NOT appear in the catalog
+        or in the allowlist. :class:`PanOSXMLAuthStrategy` handles the
+        keygen HTTP request directly; this method just forwards the
+        device credentials to the auth manager's token cache.
+
         Returns
         -------
         str
@@ -288,41 +276,81 @@ class PanOSXMLClient(BaseDeviceClient):
     def _execute_raw(self, operation: str, params: Any = None) -> str:
         """Execute a PAN-OS API call and return the raw XML response text.
 
-        Builds the appropriate ``type=op`` or ``type=log`` request based on
-        the operation, then performs a GET to ``/api/``.
+        Dispatch is fully data-driven from the catalog:
+
+        * ``self._op_types[operation]`` selects between ``type=op`` and
+          ``type=log`` request shapes.
+        * For ``type=op`` operations, ``self._op_commands[operation]``
+          supplies the XML command payload.
+        * For ``type=log`` operations,
+          ``self._log_types[operation]`` supplies the ``log-type``
+          query-parameter value.
 
         Parameters
         ----------
         operation:
-            Validated operation string from :attr:`ALLOWED_OPERATIONS`.
+            The operation name. Already validated by the command gate
+            and the model gate in :meth:`BaseDeviceClient.execute`.
         params:
-            Optional extra parameters merged into the request.  Can be a
-            dict of PAN-OS query parameters (e.g. ``{"nlogs": "20"}`` for
-            log retrieval).
+            Optional extra query parameters merged into the request
+            (e.g. ``{"nlogs": "100"}`` for log retrieval).
 
         Returns
         -------
         str
-            The raw XML text returned by the device.
+            Raw XML response text from the device.
+
+        Raises
+        ------
+        netsight.exceptions.CommandDeniedError
+            If the operation's ``type`` in the catalog is neither
+            ``"op"`` nor ``"log"``. PanOSXMLClient only speaks these two
+            dispatch shapes; any other type is a pack authoring error.
         """
+        from netsight.exceptions import CommandDeniedError
+
         url = f"https://{self._config.host}{_PANOS_API_PATH}"
         request_params: dict[str, str] = {"key": self._token or ""}
 
-        if operation in _LOG_TYPE_MAP:
-            request_params.update(self._build_log_params(operation, params))
-        else:
-            cmd = self._op_commands.get(operation) or self._OP_COMMANDS.get(operation, "")
+        op_type = self._op_types.get(operation, "op")
+        if op_type == "log":
+            # Log retrieval: type=log + log-type=<catalog value>. The
+            # actual log channel name (traffic/threat/system/...) comes
+            # from the catalog's log_type field, populated at __init__
+            # time by BaseDeviceClient.
+            log_type = self._log_types.get(operation)
+            if not log_type:
+                raise CommandDeniedError(
+                    operation=operation,
+                    reason=(
+                        "type='log' operation is missing a 'log_type' "
+                        "field in its catalog entry"
+                    ),
+                )
+            request_params["type"] = "log"
+            request_params["log-type"] = log_type
+        elif op_type == "op":
+            # Operational command: type=op + cmd=<catalog XML>.
             request_params["type"] = "op"
-            request_params["cmd"] = cmd
+            request_params["cmd"] = self._op_commands.get(operation, "")
+        else:
+            raise CommandDeniedError(
+                operation=operation,
+                reason=(
+                    f"PanOSXMLClient does not implement dispatch for "
+                    f"type={op_type!r}; supported types are 'op' and 'log'"
+                ),
+            )
 
-        # Merge any caller-supplied params (allow overriding defaults)
+        # Merge caller-supplied params last so they can override defaults.
         if isinstance(params, dict):
             request_params.update(params)
 
         logger.debug(
-            "PAN-OS API GET %s op=%s params_keys=%s",
+            "PAN-OS API GET %s op=%s type=%s params_keys=%s",
             url,
             operation,
+            op_type,
             list(request_params.keys()),
         )
 
@@ -337,33 +365,6 @@ class PanOSXMLClient(BaseDeviceClient):
             ),
         )
         return response.text
-
-    def _build_log_params(
-        self, operation: str, params: Any = None
-    ) -> dict[str, str]:
-        """Construct PAN-OS log-query parameters for a log-retrieval operation.
-
-        Parameters
-        ----------
-        operation:
-            One of ``"get_traffic_logs"``, ``"get_threat_logs"``, or
-            ``"get_system_logs"``.
-        params:
-            Optional caller-supplied dict merged into the result (e.g.
-            ``{"nlogs": "100", "query": "(addr.src in 10.0.0.0/8)"}``).
-
-        Returns
-        -------
-        dict[str, str]
-            Parameter dict ready to merge into the full request params.
-        """
-        log_params: dict[str, str] = {
-            "type": "log",
-            "log-type": _LOG_TYPE_MAP[operation],
-        }
-        if isinstance(params, dict):
-            log_params.update(params)
-        return log_params
 
     def get_device_info(self) -> dict:
         """Return basic device information parsed from ``show system info``.
@@ -382,12 +383,14 @@ class PanOSXMLClient(BaseDeviceClient):
     def get_supported_operations(self) -> list[str]:
         """Return a sorted list of publicly available operations.
 
-        Excludes internal operations (``keygen``) that should not be
-        exposed to external callers.
+        The list comes from the per-instance ``_op_commands`` dict,
+        which :class:`BaseDeviceClient` builds from the catalog at
+        construction time. No class-level hardcoded set.
 
         Returns
         -------
         list[str]
-            Alphabetically sorted list of publicly advertised operations.
+            Alphabetically sorted list of operations the pack's
+            compiled catalog declared.
         """
-        return sorted(self.ALLOWED_OPERATIONS - {"keygen"})
+        return sorted(self._op_commands.keys())

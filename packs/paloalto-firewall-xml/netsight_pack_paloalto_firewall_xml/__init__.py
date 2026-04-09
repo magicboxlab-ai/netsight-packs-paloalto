@@ -19,6 +19,7 @@ callable; it is invoked by the NetSight pack loader at startup.
 from __future__ import annotations
 
 import logging
+import tomllib
 from importlib.metadata import PackageNotFoundError, version
 from importlib.resources import files
 
@@ -31,6 +32,30 @@ logger = logging.getLogger(__name__)
 
 _DISTRIBUTION = "netsight-pack-paloalto-firewall-xml"
 _PACK_NAME = "paloalto-firewall-xml"
+
+
+def _load_catalog_operation_names() -> frozenset[str]:
+    """Return the set of operation names declared in the pack's catalog.
+
+    The pack client no longer hardcodes its operation list — the
+    authoritative source is ``_data/operations_catalog.toml``. Reading
+    the catalog here at registration time lets :class:`PackInfo` expose
+    an ``allowed_operations`` set that stays in sync with the catalog
+    without any drift window.
+
+    Returns
+    -------
+    frozenset[str]
+        Operation names keyed by the TOML catalog's top-level sections.
+    """
+    catalog_res = (
+        files("netsight_pack_paloalto_firewall_xml")
+        / "_data"
+        / "operations_catalog.toml"
+    )
+    with catalog_res.open("rb") as fh:
+        catalog = tomllib.load(fh)
+    return frozenset(catalog.keys())
 
 
 def register(registry: PackRegistry) -> None:
@@ -63,7 +88,7 @@ def register(registry: PackRegistry) -> None:
         distribution=_DISTRIBUTION,
         version=pack_version,
         client_class=PanOSXMLClient,
-        allowed_operations=frozenset(PanOSXMLClient.ALLOWED_OPERATIONS),
+        allowed_operations=_load_catalog_operation_names(),
         config_root=files("netsight_pack_paloalto_firewall_xml") / "_data",
         validator_class=PanOSXMLOperationValidator,
         metadata={
