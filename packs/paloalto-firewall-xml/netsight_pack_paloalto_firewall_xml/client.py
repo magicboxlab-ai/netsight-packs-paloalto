@@ -246,7 +246,7 @@ class PanOSXMLClient(BaseDeviceClient):
                 verify_ssl=conn.get("verify_ssl", config.verify_ssl),
                 timeout=conn.get("timeout_connect", config.timeout_connect),
             )
-        super().__init__(config, auth_strategy, resolved_config=resolved_config)
+        super().__init__(config=config, auth_strategy=auth_strategy, resolved_config=resolved_config)
 
     # ------------------------------------------------------------------
     # Abstract method implementations

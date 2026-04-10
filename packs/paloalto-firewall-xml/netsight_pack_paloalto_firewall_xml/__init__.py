@@ -102,5 +102,5 @@ def register(registry: PackRegistry) -> None:
             "min_panos_version": "6.0",
         },
     )
-    registry.register(info)
+    registry.register(info=info)
     logger.debug("Pack '%s' v%s registered", _PACK_NAME, pack_version)
