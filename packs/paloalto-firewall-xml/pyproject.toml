@@ -4,11 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "netsight-pack-paloalto-firewall-xml"
-version = "0.1.1"
+version = "0.2.0"
 description = "NetSight pack for Palo Alto Networks PAN-OS firewalls via XML API"
 requires-python = ">=3.14"
 dependencies = [
-    "netsight>=0.1.0",
+    "netsight-sdk>=1.0.0,<2.0.0",
     "requests>=2.31.0",
     "xmltodict>=0.13.0",
 ]

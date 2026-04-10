@@ -78,7 +78,7 @@ def register(registry: PackRegistry) -> None:
     try:
         pack_version = version(_DISTRIBUTION)
     except PackageNotFoundError:
-        pack_version = "0.1.0"
+        pack_version = "0.2.0"
 
     info = PackInfo(
         name=_PACK_NAME,
@@ -91,6 +91,10 @@ def register(registry: PackRegistry) -> None:
         allowed_operations=_load_catalog_operation_names(),
         config_root=files("netsight_pack_paloalto_firewall_xml") / "_data",
         validator_class=PanOSXMLOperationValidator,
+        # Version compatibility — declared per the SDK/ops split contract.
+        # See netsight-sdk SEMVER.md for the public API surface and bump rules.
+        min_sdk_version=">=1.0.0,<2.0.0",
+        declared_plugin_api=1,
         metadata={
             "description": "Palo Alto Networks PAN-OS XML API",
             "vendor": "Palo Alto Networks",
