@@ -1,6 +1,6 @@
 # netsight-packs-paloalto
 
-Palo Alto Networks vendor packs for the [NetSight SDK](https://github.com/magicboxlab-ai/netsight).
+Palo Alto Networks vendor packs for the [NetSight SDK](https://github.com/magicboxlab-ai/netsight-sdk).
 
 This repo follows the per-vendor pack distribution model described in the NetSight developer guide: one repo per vendor, holding one or more packs under `packs/`, each a self-contained Python distribution with its own `pyproject.toml`, `_data/` config tree, and PyPI-compatible entry-point registration.
 
@@ -98,7 +98,7 @@ netsight pack list
 
 ## Versioning and release
 
-Each pack has an independent version, tagged as `<pack-name>/v<version>` (e.g. `paloalto-firewall-xml/v0.1.0`). This lets packs in the same repo release on independent cadences. The NetSight core repo's `netsight/packs/_index.toml` records the minimum compatible core version (`min_core`) for each pack.
+Each pack has an independent version, tagged as `<pack-name>/v<version>` (e.g. `paloalto-firewall-xml/v0.1.0`). This lets packs in the same repo release on independent cadences. The NetSight SDK repo's `netsight/packs/_index.toml` records the minimum compatible SDK version (`min_sdk`) for each pack.
 
 ## License
 
