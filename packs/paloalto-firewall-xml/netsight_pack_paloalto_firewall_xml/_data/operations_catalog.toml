@@ -445,6 +445,7 @@ category = "logs"
 description = "Query GlobalProtect connection logs"
 read_only = true
 
+
 [show_templates]
 command = "<show><templates></templates></show>"
 type = "op"
@@ -452,6 +453,7 @@ required_model = ["panorama"]
 category = "system"
 description = "Show Panorama templates and template stacks"
 read_only = true
+
 
 [show_log_collectors]
 command = "<show><log-collector><serial-number>all</serial-number></log-collector></show>"
@@ -461,6 +463,7 @@ category = "system"
 description = "Show Panorama log collector status"
 read_only = true
 
+
 [show_panorama_status]
 command = "<show><panorama-status></panorama-status></show>"
 type = "op"
@@ -469,6 +472,7 @@ category = "system"
 description = "Show Panorama HA and system status"
 read_only = true
 
+
 [show_config_audit]
 command = "<show><config><audit></audit></config></show>"
 type = "op"
@@ -476,3 +480,4 @@ required_model = ["panorama"]
 category = "security"
 description = "Show configuration audit trail"
 read_only = true
+
