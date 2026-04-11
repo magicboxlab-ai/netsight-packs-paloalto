@@ -122,7 +122,7 @@ required_model = "*"
 category = "system"
 description = "Show NTP synchronization status"
 read_only = true
-parser_spec = "parsers/show_ntp.yaml"
+
 
 [show_bgp_peers]
 command = "<show><routing><protocol><bgp><peer></peer></bgp></protocol></routing></show>"
@@ -140,7 +140,7 @@ required_model = "*"
 category = "routing"
 description = "Show OSPF neighbor adjacencies"
 read_only = true
-parser_spec = "parsers/show_ospf_neighbors.yaml"
+
 
 [show_vpn_ipsec_sa]
 command = "<show><vpn><ipsec-sa></ipsec-sa></vpn></show>"
@@ -248,7 +248,7 @@ required_model = "*"
 category = "security"
 description = "Show active security policy rules"
 read_only = true
-parser_spec = "parsers/show_running_security_policy.yaml"
+
 
 [show_running_nat_policy]
 command = "<show><running><nat-policy></nat-policy></running></show>"
@@ -257,7 +257,7 @@ required_model = "*"
 category = "security"
 description = "Show active NAT policy rules"
 read_only = true
-parser_spec = "parsers/show_running_nat_policy.yaml"
+
 
 [show_user_ip_mapping]
 command = "<show><user><ip-user-mapping><all></all></ip-user-mapping></user></show>"
@@ -311,7 +311,7 @@ required_model = "*"
 category = "network"
 description = "Show DHCP server lease allocations"
 read_only = true
-parser_spec = "parsers/show_dhcp_server_leases.yaml"
+
 
 [show_dns_proxy_cache]
 command = "<show><dns-proxy><cache><all/></cache></dns-proxy></show>"
@@ -320,7 +320,7 @@ required_model = "*"
 category = "network"
 description = "Show DNS proxy cache entries"
 read_only = true
-parser_spec = "parsers/show_dns_proxy_cache.yaml"
+
 
 [get_tunnel_logs]
 command = ""

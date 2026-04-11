@@ -18,14 +18,14 @@ fields:
     path: type
     type: str
   session_start:
-    path: "session-start"
+    path: '"session-start"'
     type: str
   idle_for:
-    path: "idle-for"
+    path: '"idle-for"'
     type: str
   self:
     path: self
     type: str
   session_expiry:
-    path: "session-expiry"
+    path: '"session-expiry"'
     type: str

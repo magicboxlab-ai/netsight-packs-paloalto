@@ -49,7 +49,7 @@ class PanOSXMLOperationValidator(BaseOperationValidator):
         {"restart", "shutdown", "reboot", "clear"}
     )
 
-    _VALID_CATEGORIES: list[str] = ["system", "network", "security", "logs", "inventory"]
+    _VALID_CATEGORIES: list[str] = ["system", "network", "routing", "vpn", "security", "logs", "inventory"]
     _VALID_TYPES: list[str] = ["op", "log"]
 
     # ------------------------------------------------------------------

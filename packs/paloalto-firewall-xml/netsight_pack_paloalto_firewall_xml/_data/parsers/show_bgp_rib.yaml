@@ -8,12 +8,9 @@ description: "Scaffolded from sample XML for paloalto/show_bgp_rib"
 root: response.result.entry
 
 fields:
-  @vr:
-    path: @vr
-    type: str
   flags:
     path: flags
     type: str
   loc_rib:
-    path: "loc-rib"
+    path: '"loc-rib"'
     type: str

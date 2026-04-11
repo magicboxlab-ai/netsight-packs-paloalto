@@ -8,9 +8,6 @@ description: "Scaffolded from sample XML for paloalto/show_globalprotect_users"
 root: response
 
 fields:
-  @status:
-    path: @status
-    type: str
   result:
     path: result
     type: str
