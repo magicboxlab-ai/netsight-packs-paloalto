@@ -1,0 +1,49 @@
+spec_version: "1.0"
+engine: jmespath
+operation: show_jobs
+input_format: xml
+output_shape: dict
+description: "Scaffolded from sample XML for paloalto/show_jobs"
+
+root: response.result.job
+
+fields:
+  tenq:
+    path: tenq
+    type: str
+  tdeq:
+    path: tdeq
+    type: str
+  id:
+    path: id
+    type: str
+  user:
+    path: user
+    type: str
+  type:
+    path: type
+    type: str
+  status:
+    path: status
+    type: str
+  queued:
+    path: queued
+    type: str
+  stoppable:
+    path: stoppable
+    type: str
+  result:
+    path: result
+    type: str
+  tfin:
+    path: tfin
+    type: str
+  description:
+    path: description
+    type: str
+  positionInQ:
+    path: positionInQ
+    type: str
+  progress:
+    path: progress
+    type: str

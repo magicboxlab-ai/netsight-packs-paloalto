@@ -204,3 +204,93 @@ required_model = "*"
 category = "logs"
 description = "Query URL filtering logs"
 read_only = true
+
+[show_system_disk_space]
+command = "<show><system><disk-space></disk-space></system></show>"
+type = "op"
+required_model = "*"
+category = "system"
+description = "Show disk partition utilization"
+read_only = true
+parser_spec = "parsers/show_system_disk_space.yaml"
+
+[show_jobs]
+command = "<show><jobs><all></all></jobs></show>"
+type = "op"
+required_model = "*"
+category = "system"
+description = "Show all jobs with status and progress"
+read_only = true
+parser_spec = "parsers/show_jobs.yaml"
+
+[show_routing_summary]
+command = "<show><routing><summary></summary></routing></show>"
+type = "op"
+required_model = "*"
+category = "routing"
+description = "Show route counts per protocol"
+read_only = true
+parser_spec = "parsers/show_routing_summary.yaml"
+
+[show_vpn_flow]
+command = "<show><vpn><flow></flow></vpn></show>"
+type = "op"
+required_model = "*"
+category = "vpn"
+description = "Show VPN tunnel traffic statistics"
+read_only = true
+parser_spec = "parsers/show_vpn_flow.yaml"
+
+[show_running_security_policy]
+command = "<show><running><security-policy></security-policy></running></show>"
+type = "op"
+required_model = "*"
+category = "security"
+description = "Show active security policy rules"
+read_only = true
+parser_spec = "parsers/show_running_security_policy.yaml"
+
+[show_running_nat_policy]
+command = "<show><running><nat-policy></nat-policy></running></show>"
+type = "op"
+required_model = "*"
+category = "security"
+description = "Show active NAT policy rules"
+read_only = true
+parser_spec = "parsers/show_running_nat_policy.yaml"
+
+[show_user_ip_mapping]
+command = "<show><user><ip-user-mapping><all></all></ip-user-mapping></user></show>"
+type = "op"
+required_model = "*"
+category = "security"
+description = "Show User-ID IP-to-username mappings"
+read_only = true
+parser_spec = "parsers/show_user_ip_mapping.yaml"
+
+[show_counter_interface]
+command = "<show><counter><interface>all</interface></counter></show>"
+type = "op"
+required_model = "*"
+category = "network"
+description = "Show per-interface packet counters"
+read_only = true
+parser_spec = "parsers/show_counter_interface.yaml"
+
+[get_wildfire_logs]
+command = ""
+type = "log"
+log_type = "wildfire"
+required_model = "*"
+category = "logs"
+description = "Query WildFire malware analysis logs"
+read_only = true
+
+[get_data_logs]
+command = ""
+type = "log"
+log_type = "data"
+required_model = "*"
+category = "logs"
+description = "Query data filtering logs"
+read_only = true

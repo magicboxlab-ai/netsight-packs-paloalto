@@ -1,0 +1,16 @@
+spec_version: "1.0"
+engine: jmespath
+operation: show_system_disk_space
+input_format: xml
+output_shape: dict
+description: "Scaffolded from sample XML for paloalto/show_system_disk_space"
+
+root: response
+
+fields:
+  @status:
+    path: @status
+    type: str
+  result:
+    path: result
+    type: str

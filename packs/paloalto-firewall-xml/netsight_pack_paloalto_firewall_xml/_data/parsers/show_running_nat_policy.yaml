@@ -1,0 +1,13 @@
+spec_version: "1.0"
+engine: jmespath
+operation: show_running_nat_policy
+input_format: xml
+output_shape: dict
+description: "Scaffolded from sample XML for paloalto/show_running_nat_policy"
+
+root: response
+
+fields:
+  @status:
+    path: @status
+    type: str

@@ -1,0 +1,25 @@
+spec_version: "1.0"
+engine: jmespath
+operation: show_vpn_flow
+input_format: xml
+output_shape: dict
+description: "Scaffolded from sample XML for paloalto/show_vpn_flow"
+
+root: response.result
+
+fields:
+  total:
+    path: total
+    type: str
+  num_ipsec:
+    path: num_ipsec
+    type: str
+  IPSec:
+    path: IPSec
+    type: str
+  dp:
+    path: dp
+    type: str
+  num_sslvpn:
+    path: num_sslvpn
+    type: str

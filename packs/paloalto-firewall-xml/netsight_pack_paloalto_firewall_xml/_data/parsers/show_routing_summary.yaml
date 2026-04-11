@@ -1,0 +1,19 @@
+spec_version: "1.0"
+engine: jmespath
+operation: show_routing_summary
+input_format: xml
+output_shape: dict
+description: "Scaffolded from sample XML for paloalto/show_routing_summary"
+
+root: response.result.entry.All-Routes
+
+fields:
+  total:
+    path: total
+    type: str
+  limit:
+    path: limit
+    type: str
+  active:
+    path: active
+    type: str

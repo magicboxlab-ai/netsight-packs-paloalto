@@ -1,0 +1,91 @@
+spec_version: "1.0"
+engine: jmespath
+operation: show_counter_interface
+input_format: xml
+output_shape: dict
+description: "Scaffolded from sample XML for paloalto/show_counter_interface"
+
+root: response.result.ifnet.ifnet.entry
+
+fields:
+  icmp_frag:
+    path: icmp_frag
+    type: str
+  ifwderrors:
+    path: ifwderrors
+    type: str
+  ierrors:
+    path: ierrors
+    type: str
+  macspoof:
+    path: macspoof
+    type: str
+  pod:
+    path: pod
+    type: str
+  flowstate:
+    path: flowstate
+    type: str
+  ipspoof:
+    path: ipspoof
+    type: str
+  teardrop:
+    path: teardrop
+    type: str
+  ibytes:
+    path: ibytes
+    type: str
+  noarp:
+    path: noarp
+    type: str
+  sctp_conn:
+    path: sctp_conn
+    type: str
+  noroute:
+    path: noroute
+    type: str
+  noneigh:
+    path: noneigh
+    type: str
+  nomac:
+    path: nomac
+    type: str
+  l2_encap:
+    path: l2_encap
+    type: str
+  zonechange:
+    path: zonechange
+    type: str
+  other_conn:
+    path: other_conn
+    type: str
+  obytes:
+    path: obytes
+    type: str
+  land:
+    path: land
+    type: str
+  name:
+    path: name
+    type: str
+  tcp_conn:
+    path: tcp_conn
+    type: str
+  neighpend:
+    path: neighpend
+    type: str
+  ipackets:
+    path: ipackets
+    type: str
+  opackets:
+    path: opackets
+    type: str
+  l2_decap:
+    path: l2_decap
+    type: str
+  udp_conn:
+    path: udp_conn
+    type: str
+  idrops:
+    path: idrops
+    type: str
