@@ -6,9 +6,23 @@ This repo follows the per-vendor pack distribution model described in the NetSig
 
 ## Packs in this repo
 
-| Pack | Device class | Protocol | Status |
-|---|---|---|---|
-| `paloalto-firewall-xml` | firewall | XML API | beta |
+| Pack | Device class | Protocol | Operations | Status |
+|---|---|---|---|---|
+| `paloalto-firewall-xml` | firewall | XML API | 48 | beta |
+
+## paloalto-firewall-xml — operation coverage
+
+All 48 operations were generated using the `netsight pack add-operation` automated
+pipeline and verified against a live PAN-OS sandbox firewall.
+
+| Category | Count | Example operations |
+|---|---|---|
+| system | 10 | `show_system_info`, `show_system_resources`, `show_jobs`, `show_admins` |
+| network | 11 | `show_interfaces`, `show_arp_table`, `show_routing_table`, `show_bgp_peers`, `show_ospf_neighbors` |
+| routing | 9 | `show_routing_summary`, `show_bgp_summary`, `show_route_detail`, `show_fib` |
+| security | 9 | `show_security_policy`, `show_nat_policy`, `show_address_objects`, `show_service_objects` |
+| ha | 4 | `show_ha_status`, `show_ha_path_monitoring`, `show_ha_link_monitoring` |
+| logs | 5 | `get_traffic_logs`, `get_threat_logs`, `get_system_logs`, `get_url_logs`, `get_data_logs` |
 
 ## Installing a pack
 
@@ -25,7 +39,7 @@ pip install git+https://github.com/magicboxlab-ai/netsight-packs-paloalto.git#su
 Pin to a specific tag for reproducibility:
 
 ```sh
-pip install git+https://github.com/magicboxlab-ai/netsight-packs-paloalto.git@paloalto-firewall-xml/v0.1.0#subdirectory=packs/paloalto-firewall-xml
+pip install git+https://github.com/magicboxlab-ai/netsight-packs-paloalto.git@paloalto-firewall-xml/v0.2.0#subdirectory=packs/paloalto-firewall-xml
 ```
 
 Or use NetSight's bundled pack index + install helper (the index in `netsight` core points at this repo):
@@ -41,17 +55,18 @@ NetSight discovers installed packs via the `netsight.packs` entry-point group at
 ```sh
 netsight pack list
 # NAME                     VERSION  DEVICE_CLASS  PROTOCOL  STATUS
-# paloalto-firewall-xml    0.1.0    firewall      xml       installed
+# paloalto-firewall-xml    0.2.0    firewall      xml       installed
 
 netsight doctor
 # Includes: pack discovery, pack load errors, allowlist discovery, allowlist drift
 ```
 
-The pack ships a catalog of operations (`_data/operations_catalog.toml`) but **does not grant permission to run any of them**. Enable the ones you want per-user:
+The pack ships a catalog of 48 operations (`_data/operations_catalog.toml`) but **does not grant permission to run any of them**. Enable the ones you want per-user:
 
 ```sh
-netsight allowlist show paloalto-firewall-xml           # see the catalog
+netsight allowlist show paloalto-firewall-xml           # see the full catalog
 netsight allowlist enable paloalto-firewall-xml show_system_info show_interfaces
+netsight allowlist enable paloalto-firewall-xml show_routing_table show_bgp_peers
 ```
 
 ## Pack authoring
