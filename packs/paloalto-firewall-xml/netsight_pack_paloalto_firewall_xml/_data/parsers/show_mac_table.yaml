@@ -1,0 +1,25 @@
+spec_version: "1.0"
+engine: jmespath
+operation: show_mac_table
+input_format: xml
+output_shape: dict
+description: "Scaffolded from sample XML for paloalto/show_mac_table"
+
+root: response.result
+
+fields:
+  max:
+    path: max
+    type: str
+  total:
+    path: total
+    type: str
+  timeout:
+    path: timeout
+    type: str
+  dp:
+    path: dp
+    type: str
+  entries:
+    path: entries
+    type: str

@@ -1,0 +1,31 @@
+spec_version: "1.0"
+engine: jmespath
+operation: show_routing_fib
+input_format: xml
+output_shape: dict
+description: "Scaffolded from sample XML for paloalto/show_routing_fib"
+
+root: response.result.fibs.entry.entries.entry
+
+fields:
+  dst:
+    path: dst
+    type: str
+  nexthop:
+    path: nexthop
+    type: str
+  mtu:
+    path: mtu
+    type: str
+  flags:
+    path: flags
+    type: str
+  nh_type:
+    path: nh_type
+    type: str
+  interface:
+    path: interface
+    type: str
+  id:
+    path: id
+    type: str

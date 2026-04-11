@@ -372,3 +372,75 @@ required_model = ["panorama"]
 category = "system"
 description = "Show Panorama device groups"
 read_only = true
+
+[show_mac_table]
+command = "<show><mac>all</mac></show>"
+type = "op"
+required_model = "*"
+category = "network"
+description = "Show MAC address table"
+read_only = true
+parser_spec = "parsers/show_mac_table.yaml"
+
+[show_admins]
+command = "<show><admins></admins></show>"
+type = "op"
+required_model = "*"
+category = "system"
+description = "Show currently logged-in administrators"
+read_only = true
+parser_spec = "parsers/show_admins.yaml"
+
+[show_bfd_summary]
+command = "<show><routing><bfd><summary/></bfd></routing></show>"
+type = "op"
+required_model = "*"
+category = "routing"
+description = "Show BFD session status"
+read_only = true
+parser_spec = "parsers/show_bfd_summary.yaml"
+
+[show_routing_fib]
+command = "<show><routing><fib></fib></routing></show>"
+type = "op"
+required_model = "*"
+category = "routing"
+description = "Show forwarding information base"
+read_only = true
+parser_spec = "parsers/show_routing_fib.yaml"
+
+[show_session_all]
+command = "<show><session><all></all></session></show>"
+type = "op"
+required_model = "*"
+category = "system"
+description = "Show all active sessions"
+read_only = true
+parser_spec = "parsers/show_session_all.yaml"
+
+[get_hipmatch_logs]
+command = ""
+type = "log"
+log_type = "hipmatch"
+required_model = "*"
+category = "logs"
+description = "Query HIP match logs"
+read_only = true
+
+[get_userid_logs]
+command = ""
+type = "log"
+log_type = "userid"
+required_model = "*"
+category = "logs"
+description = "Query User-ID mapping logs"
+read_only = true
+
+[get_globalprotect_logs]
+command = ""
+type = "log"
+log_type = "globalprotect"
+required_model = "*"
+category = "logs"
+description = "Query GlobalProtect connection logs"
+read_only = true
