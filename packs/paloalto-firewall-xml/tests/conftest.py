@@ -156,6 +156,18 @@ def client(
     )
 
 
+@pytest.fixture()
+def panorama_client(resolved_config: dict) -> PanOSXMLClient:
+    """Client fixture with ``model="panorama"`` for Panorama-gated ops."""
+    panorama_config = _sample_config(model="panorama")
+    strategy = PanOSXMLAuthStrategy(verify_ssl=False, timeout=5)
+    return PanOSXMLClient(
+        panorama_config,
+        auth_strategy=strategy,
+        resolved_config=resolved_config,
+    )
+
+
 # ---------------------------------------------------------------------------
 # Shared XML / helper fixtures — exposed as fixtures (not imports) so that
 # per-command test files can stay import-free and Pyright has nothing to

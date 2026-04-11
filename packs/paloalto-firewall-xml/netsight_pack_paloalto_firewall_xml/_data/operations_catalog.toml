@@ -294,3 +294,81 @@ required_model = "*"
 category = "logs"
 description = "Query data filtering logs"
 read_only = true
+
+[show_bgp_rib]
+command = "<show><routing><protocol><bgp><loc-rib></loc-rib></bgp></protocol></routing></show>"
+type = "op"
+required_model = "*"
+category = "routing"
+description = "Show BGP local RIB routes"
+read_only = true
+parser_spec = "parsers/show_bgp_rib.yaml"
+
+[show_dhcp_server_leases]
+command = "<show><dhcp><server><lease>all</lease></server></dhcp></show>"
+type = "op"
+required_model = "*"
+category = "network"
+description = "Show DHCP server lease allocations"
+read_only = true
+parser_spec = "parsers/show_dhcp_server_leases.yaml"
+
+[show_dns_proxy_cache]
+command = "<show><dns-proxy><cache><all/></cache></dns-proxy></show>"
+type = "op"
+required_model = "*"
+category = "network"
+description = "Show DNS proxy cache entries"
+read_only = true
+parser_spec = "parsers/show_dns_proxy_cache.yaml"
+
+[get_tunnel_logs]
+command = ""
+type = "log"
+log_type = "tunnel"
+required_model = "*"
+category = "logs"
+description = "Query tunnel inspection logs"
+read_only = true
+
+[get_auth_logs]
+command = ""
+type = "log"
+log_type = "auth"
+required_model = "*"
+category = "logs"
+description = "Query authentication logs"
+read_only = true
+
+[get_decryption_logs]
+command = ""
+type = "log"
+log_type = "decryption"
+required_model = "*"
+category = "logs"
+description = "Query decryption logs"
+read_only = true
+
+[show_managed_devices]
+command = "<show><devices><all></all></devices></show>"
+type = "op"
+required_model = ["panorama"]
+category = "system"
+description = "Show all Panorama-managed devices"
+read_only = true
+
+[show_connected_devices]
+command = "<show><devices><connected></connected></devices></show>"
+type = "op"
+required_model = ["panorama"]
+category = "system"
+description = "Show currently connected managed devices"
+read_only = true
+
+[show_devicegroups]
+command = "<show><devicegroups></devicegroups></show>"
+type = "op"
+required_model = ["panorama"]
+category = "system"
+description = "Show Panorama device groups"
+read_only = true
