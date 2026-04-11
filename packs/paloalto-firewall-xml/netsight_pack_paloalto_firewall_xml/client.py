@@ -377,7 +377,7 @@ class PanOSXMLClient(BaseDeviceClient):
         dict
             Parsed representation of the ``<response>`` element.
         """
-        raw = self.execute("show_system_info")
+        raw = self.execute(operation="show_system_info")
         return OutputFormatter.to_dict(raw)
 
     def get_supported_operations(self) -> list[str]:

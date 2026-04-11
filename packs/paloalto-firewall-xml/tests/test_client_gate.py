@@ -21,27 +21,27 @@ class TestClientGateEnforcement:
         self, client: PanOSXMLClient
     ) -> None:
         with pytest.raises(CommandDeniedError):
-            client.execute("delete_config")
+            client.execute(operation="delete_config")
 
     def test_denied_operation_carries_operation_name(
         self, client: PanOSXMLClient
     ) -> None:
         with pytest.raises(CommandDeniedError) as exc_info:
-            client.execute("rm_slash")
+            client.execute(operation="rm_slash")
         assert exc_info.value.operation == "rm_slash"
 
     def test_empty_operation_is_denied(self, client: PanOSXMLClient) -> None:
         with pytest.raises(CommandDeniedError):
-            client.execute("")
+            client.execute(operation="")
 
     def test_commit_is_denied(self, client: PanOSXMLClient) -> None:
         """Write operations such as 'commit' must be blocked."""
         with pytest.raises(CommandDeniedError):
-            client.execute("commit")
+            client.execute(operation="commit")
 
     def test_set_config_is_denied(self, client: PanOSXMLClient) -> None:
         with pytest.raises(CommandDeniedError):
-            client.execute("set_config")
+            client.execute(operation="set_config")
 
 
 class TestGetSupportedOperations:

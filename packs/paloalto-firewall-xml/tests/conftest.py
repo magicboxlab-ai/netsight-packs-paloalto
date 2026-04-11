@@ -21,6 +21,7 @@ The drift check in ``test_catalog_drift.py`` enforces both halves.
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any, Callable
 from unittest.mock import MagicMock, patch
 
@@ -108,106 +109,38 @@ def device_config() -> DeviceConfig:
     return _sample_config()
 
 
-@pytest.fixture()
-def resolved_config() -> dict:
-    """Synthetic ``resolved_config`` mirroring the pack's operations catalog.
+def _load_catalog_as_resolved_config() -> dict:
+    """Read the real operations_catalog.toml and wrap it as a resolved_config.
 
-    Must stay in sync with
-    ``netsight_pack_paloalto_firewall_xml/_data/operations_catalog.toml``.
-    The drift-prevention test in ``test_catalog_drift.py`` fails the
-    build if the two go out of sync.
+    This eliminates the hardcoded fixture that drifted every time a new
+    operation was added. The resolved_config shape matches what
+    ConfigCompiler produces and BaseDeviceClient expects.
     """
+    import tomllib
+    catalog_path = _PACK_ROOT / "netsight_pack_paloalto_firewall_xml" / "_data" / "operations_catalog.toml"
+    with catalog_path.open("rb") as fh:
+        catalog = tomllib.load(fh)
     return {
         "connection": {},
         "auth": {},
-        "resilience": {"rate_limit": 1000},  # effectively unlimited
+        "resilience": {"rate_limit": 1000},
         "metadata": {},
-        "operations": {
-            "show_system_info": {
-                "command": "<show><system><info></info></system></show>",
-                "type": "op",
-                "required_model": "*",
-                "category": "system",
-                "description": "Show system information and uptime",
-                "read_only": True,
-            },
-            "show_interfaces": {
-                "command": "<show><interface>all</interface></show>",
-                "type": "op",
-                "required_model": "*",
-                "category": "network",
-                "description": "Show all interface status",
-                "read_only": True,
-            },
-            "show_routing_table": {
-                "command": "<show><routing><route></route></routing></show>",
-                "type": "op",
-                "required_model": "*",
-                "category": "network",
-                "description": "Show routing table",
-                "read_only": True,
-            },
-            "show_arp_table": {
-                "command": "<show><arp><entry name='all'></entry></arp></show>",
-                "type": "op",
-                "required_model": "*",
-                "category": "network",
-                "description": "Show ARP table",
-                "read_only": True,
-            },
-            "show_ha_status": {
-                "command": "<show><high-availability><all></all></high-availability></show>",
-                "type": "op",
-                "required_model": "*",
-                "category": "system",
-                "description": "Show HA status",
-                "read_only": True,
-            },
-            "show_session_info": {
-                "command": "<show><session><info></info></session></show>",
-                "type": "op",
-                "required_model": "*",
-                "category": "system",
-                "description": "Show session information",
-                "read_only": True,
-            },
-            "get_traffic_logs": {
-                "command": "",
-                "type": "log",
-                "log_type": "traffic",
-                "required_model": "*",
-                "category": "logs",
-                "description": "Query traffic logs",
-                "read_only": True,
-            },
-            "get_threat_logs": {
-                "command": "",
-                "type": "log",
-                "log_type": "threat",
-                "required_model": "*",
-                "category": "logs",
-                "description": "Query threat logs",
-                "read_only": True,
-            },
-            "get_system_logs": {
-                "command": "",
-                "type": "log",
-                "log_type": "system",
-                "required_model": "*",
-                "category": "logs",
-                "description": "Query system logs",
-                "read_only": True,
-            },
-            "request_logging_service_forwarding_status": {
-                "command": "<request><logging-service-forwarding><status></status></logging-service-forwarding></request>",
-                "type": "op",
-                "required_model": "*",
-                "category": "system",
-                "description": "Check logging service forwarding status",
-                "read_only": True,
-            },
-        },
+        "operations": dict(catalog),
     }
+
+
+_PACK_ROOT = Path(__file__).resolve().parent.parent
+
+
+@pytest.fixture()
+def resolved_config() -> dict:
+    """Resolved config built from the real operations_catalog.toml.
+
+    No longer hardcoded — reads the catalog directly so it never goes
+    stale when operations are added or removed. The ``test_catalog_drift``
+    suite validates structural consistency separately.
+    """
+    return _load_catalog_as_resolved_config()
 
 
 @pytest.fixture()
@@ -276,7 +209,7 @@ def run_operation() -> Callable[..., tuple[str, MagicMock]]:
         client._token = "TESTTOKEN"
         mock_resp = _make_mock_response(response_text)
         with patch("requests.get", return_value=mock_resp) as mock_get:
-            result = client.execute(operation, params)
+            result = client.execute(operation=operation, params=params)
         return result, mock_get
 
     return _run

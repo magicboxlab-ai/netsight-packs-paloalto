@@ -1,6 +1,6 @@
 """Per-command tests for the ``show_system_info`` operation.
 
-Locks in the contract that ``client.execute("show_system_info")``:
+Locks in the contract that ``client.execute(operation="show_system_info")``:
 
 * issues a single ``GET https://<host>/api/``
 * sends ``type=op`` and the exact ``cmd`` XML declared by the catalog

@@ -1,0 +1,16 @@
+spec_version: "1.0"
+engine: jmespath
+operation: show_lldp_neighbors
+input_format: xml
+output_shape: dict
+description: "Scaffolded from sample XML for paloalto/show_lldp_neighbors"
+
+root: response.result.entry
+
+fields:
+  @name:
+    path: @name
+    type: str
+  neighbors:
+    path: neighbors
+    type: str

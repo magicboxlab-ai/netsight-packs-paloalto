@@ -1,0 +1,61 @@
+spec_version: "1.0"
+engine: jmespath
+operation: show_resource_monitor
+input_format: xml
+output_shape: dict
+description: "Scaffolded from sample XML for paloalto/show_resource_monitor"
+
+root: response.result.resource-monitor.data-processors.dp0.second.task
+
+fields:
+  pktlog_forwarding:
+    path: pktlog_forwarding
+    type: str
+  flow_lookup:
+    path: flow_lookup
+    type: str
+  flow_fastpath:
+    path: flow_fastpath
+    type: str
+  flow_np:
+    path: flow_np
+    type: str
+  aho_result:
+    path: aho_result
+    type: str
+  zip_result:
+    path: zip_result
+    type: str
+  flow_host:
+    path: flow_host
+    type: str
+  flow_forwarding:
+    path: flow_forwarding
+    type: str
+  fpga_result:
+    path: fpga_result
+    type: str
+  module_internal:
+    path: module_internal
+    type: str
+  flow_ctrl:
+    path: flow_ctrl
+    type: str
+  send_host:
+    path: send_host
+    type: str
+  send_out:
+    path: send_out
+    type: str
+  flow_slowpath:
+    path: flow_slowpath
+    type: str
+  dfa_result:
+    path: dfa_result
+    type: str
+  nac_result:
+    path: nac_result
+    type: str
+  flow_mgmt:
+    path: flow_mgmt
+    type: str

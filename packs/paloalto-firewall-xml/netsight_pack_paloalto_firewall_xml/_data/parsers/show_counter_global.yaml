@@ -1,0 +1,34 @@
+spec_version: "1.0"
+engine: jmespath
+operation: show_counter_global
+input_format: xml
+output_shape: dict
+description: "Scaffolded from sample XML for paloalto/show_counter_global"
+
+root: response.result.global.counters.entry
+
+fields:
+  category:
+    path: category
+    type: str
+  name:
+    path: name
+    type: str
+  value:
+    path: value
+    type: str
+  rate:
+    path: rate
+    type: str
+  aspect:
+    path: aspect
+    type: str
+  desc:
+    path: desc
+    type: str
+  id:
+    path: id
+    type: str
+  severity:
+    path: severity
+    type: str

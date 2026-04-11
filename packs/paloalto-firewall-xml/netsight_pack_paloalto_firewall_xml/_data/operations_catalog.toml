@@ -105,3 +105,102 @@ required_model = "*"
 category = "system"
 description = "Check logging service forwarding status"
 read_only = true
+
+[show_counter_global]
+command = "<show><counter><global><filter><delta>yes</delta></filter></global></counter></show>"
+type = "op"
+required_model = "*"
+category = "system"
+description = "Show global packet/drop counters with delta"
+read_only = true
+parser_spec = "parsers/show_counter_global.yaml"
+
+[show_ntp]
+command = "<show><ntp></ntp></show>"
+type = "op"
+required_model = "*"
+category = "system"
+description = "Show NTP synchronization status"
+read_only = true
+parser_spec = "parsers/show_ntp.yaml"
+
+[show_bgp_peers]
+command = "<show><routing><protocol><bgp><peer></peer></bgp></protocol></routing></show>"
+type = "op"
+required_model = "*"
+category = "routing"
+description = "Show BGP peer status and prefix counts"
+read_only = true
+parser_spec = "parsers/show_bgp_peers.yaml"
+
+[show_ospf_neighbors]
+command = "<show><routing><protocol><ospf><neighbor></neighbor></ospf></protocol></routing></show>"
+type = "op"
+required_model = "*"
+category = "routing"
+description = "Show OSPF neighbor adjacencies"
+read_only = true
+parser_spec = "parsers/show_ospf_neighbors.yaml"
+
+[show_vpn_ipsec_sa]
+command = "<show><vpn><ipsec-sa></ipsec-sa></vpn></show>"
+type = "op"
+required_model = "*"
+category = "vpn"
+description = "Show IPsec Phase 2 security associations"
+read_only = true
+parser_spec = "parsers/show_vpn_ipsec_sa.yaml"
+
+[show_vpn_ike_sa]
+command = "<show><vpn><ike-sa></ike-sa></vpn></show>"
+type = "op"
+required_model = "*"
+category = "vpn"
+description = "Show IKE Phase 1 security associations"
+read_only = true
+parser_spec = "parsers/show_vpn_ike_sa.yaml"
+
+[show_lldp_neighbors]
+command = "<show><lldp><neighbors>all</neighbors></lldp></show>"
+type = "op"
+required_model = "*"
+category = "network"
+description = "Show LLDP neighbor discovery information"
+read_only = true
+parser_spec = "parsers/show_lldp_neighbors.yaml"
+
+[show_resource_monitor]
+command = "<show><running><resource-monitor></resource-monitor></running></show>"
+type = "op"
+required_model = "*"
+category = "system"
+description = "Show dataplane CPU and resource utilization"
+read_only = true
+parser_spec = "parsers/show_resource_monitor.yaml"
+
+[show_globalprotect_users]
+command = "<show><global-protect-gateway><current-user></current-user></global-protect-gateway></show>"
+type = "op"
+required_model = "*"
+category = "vpn"
+description = "Show connected GlobalProtect VPN users"
+read_only = true
+parser_spec = "parsers/show_globalprotect_users.yaml"
+
+[get_config_logs]
+command = ""
+type = "log"
+log_type = "config"
+required_model = "*"
+category = "logs"
+description = "Query configuration change logs"
+read_only = true
+
+[get_url_logs]
+command = ""
+type = "log"
+log_type = "url"
+required_model = "*"
+category = "logs"
+description = "Query URL filtering logs"
+read_only = true
